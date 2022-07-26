@@ -1,20 +1,27 @@
-name: Build and Deploy
-on: [push]
+name: build y deploy
+on:
+  push:
+    branches:
+      - master
 permissions:
   contents: write
 jobs:
-  build-and-deploy:
-    concurrency: ci-${{ github.ref }} # Recommended if you intend to make multiple deployments in quick succession.
+  build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout 🛎️
-        uses: actions/checkout@v3
-
-      - name: Install and Build 🔧 # This example project is built using npm and outputs the result to the 'build' folder. Replace with the commands required to build your project, or remove this step entirely if your site is pre-built.
+      - name: checkout repo content
+        uses: actions/checkout@v2
+      - name: setup python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+      - name: Install dependencies
         run: |
-          pip3 install -r requirements.txt
-          python freeze.py
-
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      - name: execute py script
+        run: |
+          python freezer.py && python fix.py
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4
         with:
