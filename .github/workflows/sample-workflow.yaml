@@ -21,7 +21,7 @@ jobs:
           pip install -r requirements.txt
       - name: execute py script
         run: |
-          python freeze.py && python fix.py
+          python freeze.py 
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4
         with:
